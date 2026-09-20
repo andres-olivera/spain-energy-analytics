@@ -95,7 +95,7 @@ class REDataClient:
         dataset: str,
         start: datetime,
         end: datetime,
-        time_trunc: str = "hour",
+        time_trunc: str | None = None,
     ) -> dict:
         """Fetch one date chunk for a configured dataset."""
 
@@ -107,10 +107,11 @@ class REDataClient:
 
         spec = DATASETS[dataset]
         url = f"{self.base_url}/{self.language}/datos/{spec.category}/{spec.widget}"
+        resolved_time_trunc = time_trunc or spec.time_trunc
         params = {
             "start_date": start.strftime("%Y-%m-%dT%H:%M"),
             "end_date": end.strftime("%Y-%m-%dT%H:%M"),
-            "time_trunc": time_trunc,
+            "time_trunc": resolved_time_trunc,
         }
         if spec.use_geo_params:
             params.update(PENINSULAR_GEO_PARAMS)

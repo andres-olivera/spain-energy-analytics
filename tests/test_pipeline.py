@@ -13,7 +13,7 @@ class FixtureClient:
         self.payload = json.loads(FIXTURE.read_text(encoding="utf-8"))
         self.calls = []
 
-    def fetch(self, dataset, start, end, time_trunc="hour"):
+    def fetch(self, dataset, start, end, time_trunc=None):
         self.calls.append((dataset, start, end, time_trunc))
         return self.payload
 
@@ -40,3 +40,4 @@ def test_pipeline_writes_csv_database_and_quality_report(tmp_path: Path) -> None
     assert (tmp_path / "data" / "processed" / "fact_observation.csv").exists()
     assert (tmp_path / "reports" / "data_quality.json").exists()
     assert len(client.calls) == 1
+    assert client.calls[0][3] == "day"

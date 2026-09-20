@@ -28,7 +28,7 @@ def run_pipeline(
     end: date,
     datasets: list[str],
     project_root: Path,
-    time_trunc: str = "hour",
+    time_trunc: str | None = None,
     refresh_raw: bool = False,
     client: REDataClient | None = None,
 ) -> PipelineResult:

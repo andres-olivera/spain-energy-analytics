@@ -4,7 +4,7 @@
 REData REST API
       |
       v
-src/.../api.py  -- retries, timeout, monthly chunks
+src/.../api.py  -- retries, timeout, dataset-specific resolution
       |
       v
 data/raw/<dataset>/*.json  -- immutable source layer (gitignored)
@@ -30,7 +30,11 @@ SQLite analytical database
 
 ## Why monthly API chunks?
 
-The pipeline requests one calendar month at a time. This makes retries smaller, raw files inspectable, reruns incremental, and behavior less dependent on endpoint-specific range limits.
+The pipeline requests one calendar month at a time. This makes retries smaller, raw files inspectable, reruns incremental, and behavior less dependent on endpoint-specific range limits. The requested source resolution is configured per dataset: hourly demand, hourly prices, and daily generation.
+
+## Why dataset-specific resolution?
+
+Live API validation showed that REData widgets do not all accept the same aggregation. Historical demand and real-time market prices work at hourly resolution, while `generacion/estructura-generacion` returns HTTP 400 for hourly requests and succeeds at daily resolution. Storing the validated resolution with each dataset makes the pipeline safer and removes manual CLI workarounds.
 
 ## Why keep both local and UTC timestamps?
 

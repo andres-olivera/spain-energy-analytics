@@ -25,8 +25,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--time-trunc",
         choices=["hour", "day", "month", "year"],
-        default="hour",
-        help="REData aggregation requested from the API",
+        default=None,
+        help=(
+            "Override REData aggregation for every selected dataset. "
+            "By default each dataset uses its validated resolution."
+        ),
     )
     parser.add_argument(
         "--refresh-raw",

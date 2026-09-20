@@ -1,4 +1,4 @@
-﻿"""Project configuration and REData dataset definitions."""
+"""Project configuration and REData dataset definitions."""
 
 from __future__ import annotations
 
@@ -13,13 +13,14 @@ class DatasetSpec:
 
     category: str
     widget: str
+    time_trunc: str
     use_geo_params: bool = True
 
 
 DATASETS: dict[str, DatasetSpec] = {
-    "generation": DatasetSpec("generacion", "estructura-generacion"),
-    "demand": DatasetSpec("demanda", "evolucion"),
-    "price": DatasetSpec("mercados", "precios-mercados-tiempo-real"),
+    "generation": DatasetSpec("generacion", "estructura-generacion", "day"),
+    "demand": DatasetSpec("demanda", "evolucion", "hour"),
+    "price": DatasetSpec("mercados", "precios-mercados-tiempo-real", "hour"),
 }
 
 # REData's peninsular system identifier. Keeping it centralized makes it easy to
@@ -31,7 +32,4 @@ PENINSULAR_GEO_PARAMS = {
 }
 
 DEFAULT_LANGUAGE = "es"
-DEFAULT_TIME_TRUNC = "hour"
 DEFAULT_TIMEOUT_SECONDS = 30
-
-

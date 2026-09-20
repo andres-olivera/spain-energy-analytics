@@ -1,4 +1,4 @@
-﻿from datetime import datetime
+from datetime import datetime
 
 from spain_energy_analytics.api import REDataClient
 
@@ -43,3 +43,15 @@ def test_client_builds_expected_redata_request() -> None:
     assert session.last_timeout == 12
 
 
+def test_generation_uses_dataset_default_daily_resolution() -> None:
+    session = FakeSession()
+    client = REDataClient(session=session)
+
+    client.fetch(
+        "generation",
+        datetime(2025, 1, 1, 0, 0),
+        datetime(2025, 1, 31, 23, 59),
+    )
+
+    assert session.last_url.endswith("/es/datos/generacion/estructura-generacion")
+    assert session.last_params["time_trunc"] == "day"
