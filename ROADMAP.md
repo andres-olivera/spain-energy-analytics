@@ -16,9 +16,10 @@
 
 ## Phase 2 — Portfolio visuals
 
-- [x] Reproducible matplotlib figure generator
-- [ ] Full recent-year extraction
-- [ ] Validate source magnitudes and indicator names from the live API
+- [x] Reproducible, portfolio-ready matplotlib figure generator
+- [x] Add static portfolio figures to README
+- [x] Full 2025 extraction and live API validation
+- [x] Validate source labels/coverage and document missing API magnitude metadata
 - [ ] Build four-page Power BI report
 - [ ] Add polished Power BI screenshots to README
 

@@ -102,6 +102,7 @@ spain-energy-analytics/
 │   └── raw/
 ├── docs/
 │   ├── architecture.md
+│   ├── assets/
 │   ├── data_dictionary.md
 │   └── decision_log.md
 ├── notebooks/
@@ -110,6 +111,7 @@ spain-energy-analytics/
 │   ├── figures/
 │   └── tables/
 ├── scripts/
+│   ├── generate_figures.py
 │   ├── run_analysis.py
 │   └── run_pipeline.py
 ├── sql/
@@ -196,7 +198,7 @@ data/processed/spain_energy.db
 reports/data_quality.json
 ```
 
-Generated data is intentionally ignored by Git because it is reproducible from the public API.
+Generated raw/processed data is intentionally ignored by Git because it is reproducible from the public API. Curated portfolio figures in `docs/assets/` are versioned so the repository renders useful results immediately.
 
 ## SQL analysis
 
@@ -218,6 +220,41 @@ The full portfolio query set is in [`sql/analysis_queries.sql`](sql/analysis_que
 - monthly price statistics;
 - extreme price observations;
 - monthly completeness checks.
+
+
+## Validated 2025 portfolio run
+
+The full-year 2025 pipeline was validated end to end against the live REData API.
+
+| Dataset | Resolution | Observations | Coverage |
+|---|---:|---:|---|
+| Demand | Hourly | 8,760 | 1 Jan–31 Dec 2025 |
+| Generation | Daily | 4,549 | 1 Jan–31 Dec 2025 |
+| PVPC price | Hourly | 8,760 | 1 Jan–31 Dec 2025 |
+| **Total** | — | **22,069** | **365 days** |
+
+Generation contains 12 stable technologies with full-year daily coverage plus two source-taxonomy indicators with partial coverage. Those partial indicators are retained in the modeled data for auditability but excluded from the portfolio ranking visual.
+
+The REData JSON responses do not consistently populate the `magnitude` metadata field. Portfolio chart unit labels therefore follow Red Eléctrica's published presentation conventions, while the raw source metadata is preserved unchanged in the analytical model.
+
+## Portfolio visuals
+
+<table>
+<tr>
+<td width="50%"><img src="docs/assets/demand_hourly_profile.png" alt="Average hourly electricity demand"></td>
+<td width="50%"><img src="docs/assets/weekday_vs_weekend_demand.png" alt="Weekday versus weekend electricity demand"></td>
+</tr>
+<tr>
+<td width="50%"><img src="docs/assets/generation_ranking.png" alt="Average daily generation by technology"></td>
+<td width="50%"><img src="docs/assets/monthly_prices.png" alt="Monthly average PVPC"></td>
+</tr>
+</table>
+
+The static figures are generated reproducibly from the SQLite analytical layer with:
+
+```bash
+python scripts/generate_figures.py
+```
 
 ## Power BI
 
@@ -281,7 +318,7 @@ Python 3.11 + Python 3.12
 
 ## Next milestone
 
-The engineering foundation is complete. The next visual milestone is to run a full recent-year extraction, validate the resulting source magnitudes, and build the Power BI report from the modeled CSV layer.
+The validated engineering and static-visualization layers are complete. The next milestone is the four-page Power BI report and polished dashboard screenshots.
 
 ## License
 

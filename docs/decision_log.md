@@ -28,3 +28,13 @@
 **Change:** each dataset owns its validated REData aggregation: demand is hourly, price is hourly, and generation is daily.
 
 **Reason:** live API validation showed that `generacion/estructura-generacion` rejects `time_trunc=hour` with HTTP 400 but succeeds with `time_trunc=day`. Demand and price both succeeded at hourly resolution. Keeping this metadata in configuration prevents invalid cross-dataset assumptions while preserving a single reusable pipeline.
+
+## 2026-09 — Portfolio visualization layer
+
+**Validated run:** the complete 2025 extraction produced 22,069 modeled observations across 365 dates: 8,760 demand, 8,760 PVPC-price, and 4,549 generation observations.
+
+**Generation coverage:** 12 generation indicators provide full-year daily coverage. `Turbina de vapor` appears for 168 days and `Fuel + Gas` for one day; these source-taxonomy changes are retained in the model but excluded from the stable-technology ranking visual.
+
+**Units:** REData's `magnitude` field is not consistently populated in these live responses. The analytical model preserves that null metadata instead of fabricating it. Portfolio visual labels use Red Eléctrica's published public-data conventions (MWh for demand/generation energy and €/MWh for PVPC presentation), and this distinction is documented explicitly.
+
+**Presentation:** static figures are generated from SQLite into `docs/assets/` so GitHub renders useful project outputs without committing reproducible raw datasets or the local database.

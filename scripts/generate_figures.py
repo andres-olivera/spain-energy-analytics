@@ -1,4 +1,4 @@
-"""Generate portfolio figures from the modeled SQLite database."""
+"""Generate portfolio-ready figures from the modeled SQLite database."""
 
 from __future__ import annotations
 
@@ -7,73 +7,188 @@ from pathlib import Path
 
 import matplotlib.pyplot as plt
 import pandas as pd
+from matplotlib.ticker import StrMethodFormatter
+
+GENERATION_LABELS = {
+    "Eólica": "Wind",
+    "Nuclear": "Nuclear",
+    "Solar fotovoltaica": "Solar PV",
+    "Ciclo combinado": "Combined cycle",
+    "Hidráulica": "Hydro",
+    "Cogeneración": "Cogeneration",
+    "Otras renovables": "Other renewables",
+    "Solar térmica": "Solar thermal",
+    "Carbón": "Coal",
+    "Residuos renovables": "Renewable waste",
+    "Residuos no renovables": "Non-renewable waste",
+}
 
 
-def _save_demand_profile(connection: sqlite3.Connection, output_dir: Path) -> None:
+def _year_label(connection: sqlite3.Connection) -> str:
+    row = connection.execute(
+        """
+        SELECT MIN(d.year), MAX(d.year)
+        FROM fact_observation f
+        JOIN dim_date d USING (date_key)
+        """
+    ).fetchone()
+    if not row or row[0] is None:
+        return ""
+    if row[0] == row[1]:
+        return str(row[0])
+    return f"{row[0]}–{row[1]}"
+
+
+def _save_demand_profile(
+    connection: sqlite3.Connection, output_dir: Path, year_label: str
+) -> None:
     frame = pd.read_sql_query(
         """
-        SELECT i.indicator_title, f.hour_local, AVG(f.value) AS average_value
+        SELECT f.hour_local, AVG(f.value) AS average_value
         FROM fact_observation f
         JOIN dim_indicator i USING (indicator_key)
         WHERE i.dataset = 'demand'
-        GROUP BY i.indicator_title, f.hour_local
-        ORDER BY i.indicator_title, f.hour_local
+        GROUP BY f.hour_local
+        ORDER BY f.hour_local
         """,
         connection,
     )
     if frame.empty:
         return
 
-    pivot = frame.pivot(
-        index="hour_local", columns="indicator_title", values="average_value"
-    )
-    ax = pivot.plot(figsize=(10, 5))
-    ax.set_title("Average electricity demand profile by local hour")
+    fig, ax = plt.subplots(figsize=(10, 5.4))
+    ax.plot(frame["hour_local"], frame["average_value"], marker="o", markersize=4)
+    ax.set_title(f"Average hourly electricity demand — Spain, {year_label}")
     ax.set_xlabel("Local hour")
-    ax.set_ylabel("Source value — inspect indicator magnitude")
-    ax.figure.tight_layout()
-    ax.figure.savefig(output_dir / "demand_hourly_profile.png", dpi=160)
-    plt.close(ax.figure)
+    ax.set_ylabel("Average hourly demand (MWh)")
+    ax.set_xticks(range(0, 24, 2))
+    ax.yaxis.set_major_formatter(StrMethodFormatter("{x:,.0f}"))
+    ax.grid(axis="y", alpha=0.25)
+    fig.tight_layout()
+    fig.savefig(output_dir / "demand_hourly_profile.png", dpi=180, bbox_inches="tight")
+    plt.close(fig)
 
 
-def _save_generation_ranking(connection: sqlite3.Connection, output_dir: Path) -> None:
+def _save_weekday_weekend_demand(
+    connection: sqlite3.Connection, output_dir: Path, year_label: str
+) -> None:
     frame = pd.read_sql_query(
         """
-        SELECT i.indicator_title, i.magnitude, AVG(f.value) AS average_value
+        SELECT
+            d.is_weekend,
+            AVG(f.value) AS average_value
         FROM fact_observation f
         JOIN dim_indicator i USING (indicator_key)
-        WHERE i.dataset = 'generation'
-        GROUP BY i.indicator_title, i.magnitude
+        JOIN dim_date d USING (date_key)
+        WHERE i.dataset = 'demand'
+        GROUP BY d.is_weekend
+        ORDER BY d.is_weekend
+        """,
+        connection,
+    )
+    if len(frame) != 2:
+        return
+
+    labels = ["Weekday", "Weekend"]
+    values = frame["average_value"].tolist()
+    weekday, weekend = values
+    difference = (weekday / weekend - 1) * 100 if weekend else 0
+
+    fig, ax = plt.subplots(figsize=(7.5, 5.2))
+    bars = ax.bar(labels, values)
+    ax.set_title(f"Weekday vs weekend electricity demand — Spain, {year_label}")
+    ax.set_ylabel("Average hourly demand (MWh)")
+    ax.yaxis.set_major_formatter(StrMethodFormatter("{x:,.0f}"))
+    ax.grid(axis="y", alpha=0.25)
+
+    for bar, value in zip(bars, values, strict=True):
+        ax.text(
+            bar.get_x() + bar.get_width() / 2,
+            value,
+            f"{value:,.0f}",
+            ha="center",
+            va="bottom",
+        )
+
+    ax.text(
+        0.5,
+        0.94,
+        f"Weekday demand is {difference:.1f}% higher on average",
+        transform=ax.transAxes,
+        ha="center",
+        va="top",
+    )
+    fig.tight_layout()
+    fig.savefig(
+        output_dir / "weekday_vs_weekend_demand.png",
+        dpi=180,
+        bbox_inches="tight",
+    )
+    plt.close(fig)
+
+
+def _save_generation_ranking(
+    connection: sqlite3.Connection, output_dir: Path, year_label: str
+) -> None:
+    frame = pd.read_sql_query(
+        """
+        SELECT
+            i.indicator_title,
+            AVG(f.value) AS average_value,
+            COUNT(*) AS observations
+        FROM fact_observation f
+        JOIN dim_indicator i USING (indicator_key)
+        WHERE
+            i.dataset = 'generation'
+            AND i.indicator_title <> 'Generación total'
+        GROUP BY i.indicator_title
+        HAVING COUNT(*) >= 300
         ORDER BY average_value DESC
-        LIMIT 12
         """,
         connection,
     )
     if frame.empty:
         return
 
-    frame = frame.sort_values("average_value")
-    ax = frame.plot.barh(
-        x="indicator_title", y="average_value", legend=False, figsize=(10, 6)
+    frame["display_title"] = frame["indicator_title"].map(GENERATION_LABELS).fillna(
+        frame["indicator_title"]
     )
-    ax.set_title("Generation indicators ranked by average value")
-    ax.set_xlabel("Average source value — inspect magnitude")
+    frame = frame.head(10).sort_values("average_value")
+
+    fig, ax = plt.subplots(figsize=(10, 6.2))
+    ax.barh(frame["display_title"], frame["average_value"])
+    ax.set_title(f"Average daily generation by technology — Spain, {year_label}")
+    ax.set_xlabel("Average daily generation (MWh)")
     ax.set_ylabel("")
-    ax.figure.tight_layout()
-    ax.figure.savefig(output_dir / "generation_ranking.png", dpi=160)
-    plt.close(ax.figure)
+    ax.xaxis.set_major_formatter(StrMethodFormatter("{x:,.0f}"))
+    ax.grid(axis="x", alpha=0.2)
+    ax.text(
+        0,
+        -0.13,
+        "Stable indicators only (≥300 daily observations); total generation excluded.",
+        transform=ax.transAxes,
+        fontsize=9,
+    )
+    fig.tight_layout()
+    fig.savefig(output_dir / "generation_ranking.png", dpi=180, bbox_inches="tight")
+    plt.close(fig)
 
 
-def _save_monthly_prices(connection: sqlite3.Connection, output_dir: Path) -> None:
+def _save_monthly_prices(
+    connection: sqlite3.Connection, output_dir: Path, year_label: str
+) -> None:
     frame = pd.read_sql_query(
         """
-        SELECT d.year, d.month, i.indicator_title, AVG(f.value) AS average_value
+        SELECT
+            d.year,
+            d.month,
+            AVG(f.value) AS average_value
         FROM fact_observation f
         JOIN dim_indicator i USING (indicator_key)
         JOIN dim_date d USING (date_key)
         WHERE i.dataset = 'price'
-        GROUP BY d.year, d.month, i.indicator_title
-        ORDER BY d.year, d.month, i.indicator_title
+        GROUP BY d.year, d.month
+        ORDER BY d.year, d.month
         """,
         connection,
     )
@@ -83,16 +198,17 @@ def _save_monthly_prices(connection: sqlite3.Connection, output_dir: Path) -> No
     frame["period"] = pd.to_datetime(
         dict(year=frame["year"], month=frame["month"], day=1)
     )
-    pivot = frame.pivot(
-        index="period", columns="indicator_title", values="average_value"
-    )
-    ax = pivot.plot(figsize=(10, 5))
-    ax.set_title("Monthly average electricity price indicators")
+
+    fig, ax = plt.subplots(figsize=(10, 5.4))
+    ax.plot(frame["period"], frame["average_value"], marker="o", markersize=5)
+    ax.set_title(f"Monthly average PVPC — Spain, {year_label}")
     ax.set_xlabel("Month")
-    ax.set_ylabel("Average source value — inspect magnitude")
-    ax.figure.tight_layout()
-    ax.figure.savefig(output_dir / "monthly_prices.png", dpi=160)
-    plt.close(ax.figure)
+    ax.set_ylabel("Average PVPC (€/MWh)")
+    ax.grid(axis="y", alpha=0.25)
+    ax.tick_params(axis="x", rotation=0)
+    fig.tight_layout()
+    fig.savefig(output_dir / "monthly_prices.png", dpi=180, bbox_inches="tight")
+    plt.close(fig)
 
 
 def main() -> None:
@@ -101,18 +217,20 @@ def main() -> None:
     if not db_path.exists():
         raise SystemExit("Database not found. Run scripts/run_pipeline.py first.")
 
-    output_dir = root / "reports" / "figures"
+    output_dir = root / "docs" / "assets"
     output_dir.mkdir(parents=True, exist_ok=True)
 
     connection = sqlite3.connect(db_path)
     try:
-        _save_demand_profile(connection, output_dir)
-        _save_generation_ranking(connection, output_dir)
-        _save_monthly_prices(connection, output_dir)
+        year_label = _year_label(connection)
+        _save_demand_profile(connection, output_dir, year_label)
+        _save_weekday_weekend_demand(connection, output_dir, year_label)
+        _save_generation_ranking(connection, output_dir, year_label)
+        _save_monthly_prices(connection, output_dir, year_label)
     finally:
         connection.close()
 
-    print(f"Figures written to {output_dir}")
+    print(f"Portfolio figures written to {output_dir}")
 
 
 if __name__ == "__main__":
