@@ -1,0 +1,63 @@
+{
+  "data": {
+    "type": "Test widget",
+    "id": "test",
+    "attributes": {
+      "title": "Synthetic REData fixture"
+    }
+  },
+  "included": [
+    {
+      "type": "Solar fotovoltaica",
+      "id": "14",
+      "groupId": null,
+      "attributes": {
+        "title": "Solar fotovoltaica",
+        "description": null,
+        "color": "#f4d03f",
+        "type": "Renovable",
+        "magnitude": "MW",
+        "composite": false,
+        "last-update": "2026-01-02T10:00:00.000+01:00",
+        "values": [
+          {
+            "value": 1000.0,
+            "percentage": 0.1,
+            "datetime": "2026-01-01T00:00:00.000+01:00"
+          },
+          {
+            "value": 1200.0,
+            "percentage": 0.12,
+            "datetime": "2026-01-01T01:00:00.000+01:00"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Eólica",
+      "id": "12",
+      "groupId": null,
+      "attributes": {
+        "title": "Eólica",
+        "description": null,
+        "color": "#52be80",
+        "type": "Renovable",
+        "magnitude": "MW",
+        "composite": false,
+        "last-update": "2026-01-02T10:00:00.000+01:00",
+        "values": [
+          {
+            "value": 5000.0,
+            "percentage": 0.5,
+            "datetime": "2026-01-01T00:00:00.000+01:00"
+          },
+          {
+            "value": 5100.0,
+            "percentage": 0.51,
+            "datetime": "2026-01-01T01:00:00.000+01:00"
+          }
+        ]
+      }
+    }
+  ]
+}
