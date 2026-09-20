@@ -1,8 +1,8 @@
-# Spain Energy Analytics
+﻿# Spain Energy Analytics
 
 [![CI](https://github.com/andres-olivera/spain-energy-analytics/actions/workflows/ci.yml/badge.svg)](https://github.com/andres-olivera/spain-energy-analytics/actions/workflows/ci.yml)
 
-End-to-end data analytics project built with public Spanish electricity data from **Red Eléctrica de España (REE)**. The repository demonstrates the complete path from a REST API to an analytics-ready data model, SQL analysis, automated tests, CI, and a Power BI-ready layer.
+End-to-end data analytics project built with public Spanish electricity data from **Red ElÃ©ctrica de EspaÃ±a (REE)**. The repository demonstrates the complete path from a REST API to an analytics-ready data model, SQL analysis, automated tests, CI, and a Power BI-ready layer.
 
 ## What this project demonstrates
 
@@ -34,12 +34,12 @@ The source is REE's public **REData API**:
 - Documentation: https://www.ree.es/en/datos/apidata
 - Base API: https://apidatos.ree.es
 
-The pipeline currently supports three widgets:
+The pipeline currently supports three historical-analysis widgets:
 
 | Project dataset | REData category / widget |
 |---|---|
 | `generation` | `generacion/estructura-generacion` |
-| `demand` | `demanda/demanda-tiempo-real` |
+| `demand` | `demanda/evolucion` |
 | `price` | `mercados/precios-mercados-tiempo-real` |
 
 No API key is required for these public endpoints.
@@ -93,39 +93,39 @@ A key modeling decision is to preserve REData's source `magnitude` instead of si
 
 ```text
 spain-energy-analytics/
-├── .github/workflows/ci.yml
-├── dashboard/
-│   ├── README.md
-│   └── screenshots/
-├── data/
-│   ├── processed/
-│   └── raw/
-├── docs/
-│   ├── architecture.md
-│   ├── data_dictionary.md
-│   └── decision_log.md
-├── notebooks/
-│   └── 01_exploratory_analysis.ipynb
-├── reports/
-│   ├── figures/
-│   └── tables/
-├── scripts/
-│   ├── run_analysis.py
-│   └── run_pipeline.py
-├── sql/
-│   ├── analysis_queries.sql
-│   └── schema.sql
-├── src/spain_energy_analytics/
-│   ├── api.py
-│   ├── config.py
-│   ├── database.py
-│   ├── extract.py
-│   ├── pipeline.py
-│   ├── quality.py
-│   └── transform.py
-├── tests/
-├── pyproject.toml
-└── requirements.txt
+â”œâ”€â”€ .github/workflows/ci.yml
+â”œâ”€â”€ dashboard/
+â”‚   â”œâ”€â”€ README.md
+â”‚   â””â”€â”€ screenshots/
+â”œâ”€â”€ data/
+â”‚   â”œâ”€â”€ processed/
+â”‚   â””â”€â”€ raw/
+â”œâ”€â”€ docs/
+â”‚   â”œâ”€â”€ architecture.md
+â”‚   â”œâ”€â”€ data_dictionary.md
+â”‚   â””â”€â”€ decision_log.md
+â”œâ”€â”€ notebooks/
+â”‚   â””â”€â”€ 01_exploratory_analysis.ipynb
+â”œâ”€â”€ reports/
+â”‚   â”œâ”€â”€ figures/
+â”‚   â””â”€â”€ tables/
+â”œâ”€â”€ scripts/
+â”‚   â”œâ”€â”€ run_analysis.py
+â”‚   â””â”€â”€ run_pipeline.py
+â”œâ”€â”€ sql/
+â”‚   â”œâ”€â”€ analysis_queries.sql
+â”‚   â””â”€â”€ schema.sql
+â”œâ”€â”€ src/spain_energy_analytics/
+â”‚   â”œâ”€â”€ api.py
+â”‚   â”œâ”€â”€ config.py
+â”‚   â”œâ”€â”€ database.py
+â”‚   â”œâ”€â”€ extract.py
+â”‚   â”œâ”€â”€ pipeline.py
+â”‚   â”œâ”€â”€ quality.py
+â”‚   â””â”€â”€ transform.py
+â”œâ”€â”€ tests/
+â”œâ”€â”€ pyproject.toml
+â””â”€â”€ requirements.txt
 ```
 
 ## Quick start
@@ -223,10 +223,10 @@ The processed CSV files are designed for direct import into Power BI. The exact 
 
 The intended report contains four pages:
 
-1. **Overview** — coverage, dates, observation count, and slicers.
-2. **Demand** — time series, hourly profile, and weekday/weekend comparison.
-3. **Generation** — technology comparison and time evolution.
-4. **Prices** — time series, monthly statistics, distribution, and extremes.
+1. **Overview** â€” coverage, dates, observation count, and slicers.
+2. **Demand** â€” time series, hourly profile, and weekday/weekend comparison.
+3. **Generation** â€” technology comparison and time evolution.
+4. **Prices** â€” time series, monthly statistics, distribution, and extremes.
 
 Screenshots will live in `dashboard/screenshots/` once the `.pbix` report is assembled in Power BI Desktop.
 
@@ -284,3 +284,5 @@ The engineering foundation is complete. The next visual milestone is to run a fu
 ## License
 
 MIT License. See [`LICENSE`](LICENSE).
+
+

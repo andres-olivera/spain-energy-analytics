@@ -1,4 +1,4 @@
-"""Project configuration and REData dataset definitions."""
+﻿"""Project configuration and REData dataset definitions."""
 
 from __future__ import annotations
 
@@ -18,7 +18,7 @@ class DatasetSpec:
 
 DATASETS: dict[str, DatasetSpec] = {
     "generation": DatasetSpec("generacion", "estructura-generacion"),
-    "demand": DatasetSpec("demanda", "demanda-tiempo-real"),
+    "demand": DatasetSpec("demanda", "evolucion"),
     "price": DatasetSpec("mercados", "precios-mercados-tiempo-real"),
 }
 
@@ -33,3 +33,5 @@ PENINSULAR_GEO_PARAMS = {
 DEFAULT_LANGUAGE = "es"
 DEFAULT_TIME_TRUNC = "hour"
 DEFAULT_TIMEOUT_SECONDS = 30
+
+
