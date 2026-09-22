@@ -1,59 +1,130 @@
-# Power BI build guide
+# Power BI dashboard
 
-The pipeline writes three import-ready files to `data/processed/`:
+The report is built in Power BI Desktop from:
 
-- `fact_observation.csv`
-- `dim_indicator.csv`
-- `dim_date.csv`
+- `data/processed/fact_observation.csv`
+- `data/processed/dim_indicator.csv`
+- `data/processed/dim_date.csv`
 
 ## Model
 
-Create these relationships in Power BI:
+Relationships:
 
 1. `dim_indicator[indicator_key]` **1 -> many** `fact_observation[indicator_key]`
 2. `dim_date[date_key]` **1 -> many** `fact_observation[date_key]`
 
-Use single-direction filtering from each dimension to the fact table. Mark `dim_date[date]` as the date table.
+Use single-direction filtering from the dimensions to the fact table and mark `dim_date[date]` as the date table.
 
-## Core measures
+## Import note for Spanish locales
+
+`value` and `percentage` use decimal points in the CSV source. Import those columns as **Decimal Number** with locale **English (United States)** so Power Query parses them correctly.
+
+## DAX measures
 
 ```DAX
-Observations = COUNTROWS(fact_observation)
-
-Average Value = AVERAGE(fact_observation[value])
-
-Maximum Value = MAX(fact_observation[value])
-
-Minimum Value = MIN(fact_observation[value])
+Observations =
+COUNTROWS(fact_observation)
 ```
 
-Do not sum unlike indicators blindly. Filter by `dataset`, `indicator_title`, and `magnitude` so each visual has a well-defined unit.
+```DAX
+Average Demand (MWh) =
+CALCULATE(
+    AVERAGE(fact_observation[value]),
+    dim_indicator[dataset] = "demand"
+)
+```
 
-## Suggested report pages
+```DAX
+Average PVPC (€/MWh) =
+CALCULATE(
+    AVERAGE(fact_observation[value]),
+    dim_indicator[dataset] = "price"
+)
+```
 
-### 1. Overview
-- Dataset coverage cards
-- Date-range cards
-- Observation count
-- Slicers for dataset, indicator, year, and month
+```DAX
+Total Generation =
+CALCULATE(
+    SUM(fact_observation[value]),
+    dim_indicator[indicator_title] = "Generación total"
+)
+```
 
-### 2. Demand
-- Line chart: local timestamp vs value
-- Column chart: average value by local hour
-- Weekday/weekend comparison
-- Indicator slicer for real, scheduled, or forecast demand series
+```DAX
+Total Generation (M MWh) =
+DIVIDE(
+    [Total Generation],
+    1000000
+)
+```
 
-### 3. Generation
-- Technology/indicator ranking by average value
-- Time series for selected technologies
-- Source percentage over time when the API provides it
+```DAX
+Average Generation (MWh) =
+CALCULATE(
+    AVERAGE(fact_observation[value]),
+    dim_indicator[dataset] = "generation"
+)
+```
 
-### 4. Prices
-- Price time series
-- Monthly min/average/max
-- Distribution by hour
-- Top and bottom price observations
+Calculated column:
 
-## Portfolio finish
+```DAX
+Day Type =
+IF(
+    dim_date[is_weekend] = 1,
+    "Weekend",
+    "Weekday"
+)
+```
 
-Export two clean screenshots to `dashboard/screenshots/` and add them to the main README after the report is finished. Keep the `.pbix` locally if it becomes too large for normal Git; Git LFS is an option if you want the file versioned.
+## Final report pages
+
+### Overview
+- KPI cards: observations, average demand, average PVPC, total generation
+- Monthly Average PVPC
+- Average Demand by Hour
+- Synced date-range slicer
+- Page navigator
+
+![Overview](screenshots/overview.png)
+
+### Demand
+- Daily Average Electricity Demand
+- Average Demand by Hour
+- Weekday vs Weekend Demand
+
+![Demand](screenshots/demand.png)
+
+### Generation
+- Daily Total Electricity Generation
+- Average Daily Generation by Technology
+- Monthly Generation by Technology
+
+![Generation](screenshots/generation.png)
+
+### Prices
+- Daily Average PVPC
+- Average PVPC by Hour
+- Monthly Average PVPC
+
+![Prices](screenshots/prices.png)
+
+## Design
+
+- canvas background: `#F6F8FB`
+- visual background: `#FFFFFF`
+- primary accent: `#2F80ED`
+- primary text: `#1F2937`
+- subtle borders: `#E5E7EB`
+
+The date slicer is synchronized across Overview, Demand, Generation, and Prices, and a page navigator is present on the report pages.
+
+## Reproducibility
+
+Generate the source tables with:
+
+```bash
+python scripts/run_pipeline.py --start 2025-01-01 --end 2025-12-31 --refresh-raw
+```
+
+The validated 2025 run contains **22,069 observations across 365 dates**.

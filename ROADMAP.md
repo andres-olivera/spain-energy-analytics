@@ -14,14 +14,16 @@
 - [x] Automated tests
 - [x] GitHub Actions CI
 
-## Phase 2 — Portfolio visuals
+## Phase 2 — Portfolio visuals ✅
 
 - [x] Reproducible, portfolio-ready matplotlib figure generator
 - [x] Add static portfolio figures to README
 - [x] Full 2025 extraction and live API validation
 - [x] Validate source labels/coverage and document missing API magnitude metadata
-- [ ] Build four-page Power BI report
-- [ ] Add polished Power BI screenshots to README
+- [x] Build four-page Power BI report
+- [x] Add polished Power BI screenshots to README
+- [x] Synchronize date filtering across report pages
+- [x] Add page navigation
 
 ## Phase 3 — Optional data-science extension
 
@@ -31,4 +33,4 @@
 - [ ] Compare baseline vs machine-learning model
 - [ ] Document model limitations and leakage controls
 
-The ML phase is deliberately optional. The core objective is a clean, credible analytics engineering project rather than an oversized repository with unrelated features.
+The core analytics-engineering and BI portfolio is complete. The ML phase is deliberately optional and should only be added if it contributes a distinct data-science capability.
