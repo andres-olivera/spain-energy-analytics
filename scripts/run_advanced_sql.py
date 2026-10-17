@@ -9,7 +9,6 @@ from pathlib import Path
 
 import pandas as pd
 
-
 ROOT = Path(__file__).resolve().parents[1]
 QUERY_FILE = ROOT / "sql" / "advanced_analysis.sql"
 DEFAULT_DB = ROOT / "data" / "processed" / "spain_energy.db"
