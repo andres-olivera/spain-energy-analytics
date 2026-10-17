@@ -4,7 +4,11 @@
 
 End-to-end data analytics project built with public Spanish electricity data from **Red Eléctrica de España (REE)**. The repository demonstrates the complete path from a REST API to an analytics-ready data model, SQL analysis, automated tests, CI, reproducible visualizations, and a four-page Power BI dashboard.
 
-**Start here:** [Hiring-manager case study](docs/PORTFOLIO_CASE_STUDY.md) · [Stakeholder questions](docs/EXECUTIVE_INSIGHTS.md) · [Advanced SQL analysis](sql/advanced_analysis.sql).
+### [🚀 Explore the live interactive energy dashboard](https://andres-spain-energy-analytics.streamlit.app/)
+
+**Free public Streamlit companion:** filter the 2025 REData dataset by date, explore demand, generation and PVPC series, and inspect methodological limitations. This is a separate web application, **not** the original Power BI report.
+
+**Start here:** [Live interactive demo](https://andres-spain-energy-analytics.streamlit.app/) · [Hiring-manager case study](docs/PORTFOLIO_CASE_STUDY.md) · [Power BI screenshots](dashboard/README.md) · [Stakeholder questions](docs/EXECUTIVE_INSIGHTS.md) · [Advanced SQL analysis](sql/advanced_analysis.sql).
 
 ## What this project demonstrates
 
@@ -45,14 +49,14 @@ flowchart LR
 ## Explore the project
 
 - **Power BI (original project)**: four-page dashboard documented below; no public Power BI link is currently configured. [Dashboard build instructions](dashboard/README.md).
-- **Streamlit companion (free web demo)**: independent, interactive exploration of the same 2025 REData model, with time filters and indicator selection. [App source](app/streamlit_app.py) · [Deployment guide](docs/PUBLIC_STREAMLIT_DEMO.md). The 2025 public snapshot has now been generated and validated (22,069 observations); the app is **ready to deploy**. A publicly accessible URL is not yet configured.
+- **Streamlit companion (free web demo)**: independent, interactive exploration of the same 2025 REData model, with time filters and indicator selection. [App source](app/streamlit_app.py) · [Deployment guide](docs/PUBLIC_STREAMLIT_DEMO.md). The 2025 public snapshot has been generated and validated (22,069 observations); the [web application is publicly deployed](https://andres-spain-energy-analytics.streamlit.app/). The Overview page and date/indicator controls were visually checked in the live deployment.
 - **Python and SQL**: reproduce the analysis locally using the [quick start](#quick-start) and the [advanced SQL portfolio queries](sql/advanced_analysis.sql).
 - **Data provenance:** the Streamlit charts will use a versioned 2025 snapshot produced by the [automated REData ETL workflow](.github/workflows/publish_energy_snapshot.yml); original units remain attached to each source indicator.
 - **Decision-focused report**: see the [executive interpretation guide](docs/EXECUTIVE_INSIGHTS.md) for reproducible business questions and cautions about mixed units.
 
 ## Interactive web companion
 
-A standalone Streamlit application is implemented in [`app/streamlit_app.py`](app/streamlit_app.py). It is a **complement**, not a Power BI replica. The validated full-year 2025 snapshot is already published under [`app/data/`](app/data), with **22,069 observations covering 365 dates** and 16 source indicators. The application is ready for free Streamlit Community Cloud hosting; public deployment still requires the repository owner's approval. [Deploy instructions](docs/PUBLIC_STREAMLIT_DEMO.md).
+A standalone Streamlit application is implemented in [`app/streamlit_app.py`](app/streamlit_app.py). It is a **complement**, not a Power BI replica. The validated full-year 2025 snapshot is already published under [`app/data/`](app/data), with **22,069 observations covering 365 dates** and 16 source indicators. The application is [now deployed publicly](https://andres-spain-energy-analytics.streamlit.app/) on Streamlit Community Cloud. Its Overview page and initial filters have been visually verified; the other tabs still need individual live checks. [Deployment notes](docs/PUBLIC_STREAMLIT_DEMO.md).
 
 ## Power BI dashboard
 
