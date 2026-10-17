@@ -58,7 +58,7 @@ No revenue, profit, or percentage findings are invented in this document.
 
 ## Presentation improvements still pending
 
-- Replace the withdrawn duplicated Power BI generation screenshot with an
-  authentic capture from Power BI Desktop.
+- Complete: an authentic Generation page capture is now included in
+  [`dashboard/screenshots/generation.png`](../dashboard/screenshots/generation.png).
 - Share a playable dashboard if your organization's Power BI publishing
   policies permit, or add an accurate narrated demonstration.
