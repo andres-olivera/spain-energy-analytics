@@ -4,7 +4,7 @@ from pathlib import Path
 
 import pandas as pd
 
-from scripts.run_advanced_sql import named_queries, run
+from spain_energy_analytics.advanced_sql import named_queries, run
 
 ROOT = Path(__file__).resolve().parents[1]
 
