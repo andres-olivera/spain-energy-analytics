@@ -44,9 +44,15 @@ flowchart LR
 
 ## Explore the project
 
-- **Power BI**: four-page dashboard documented below. Interactive public sharing is not yet configured; [dashboard build instructions](dashboard/README.md).
+- **Power BI (original project)**: four-page dashboard documented below; no public Power BI link is currently configured. [Dashboard build instructions](dashboard/README.md).
+- **Streamlit companion (free web demo)**: independent, interactive exploration of the same 2025 REData model, with time filters and indicator selection. [App source](app/streamlit_app.py) · [Deployment guide](docs/PUBLIC_STREAMLIT_DEMO.md). The public dataset snapshot must be generated before deployment; no live URL is claimed yet.
 - **Python and SQL**: reproduce the analysis locally using the [quick start](#quick-start) and the [advanced SQL portfolio queries](sql/advanced_analysis.sql).
+- **Data provenance:** the Streamlit charts will use a versioned 2025 snapshot produced by the [automated REData ETL workflow](.github/workflows/publish_energy_snapshot.yml); original units remain attached to each source indicator.
 - **Decision-focused report**: see the [executive interpretation guide](docs/EXECUTIVE_INSIGHTS.md) for reproducible business questions and cautions about mixed units.
+
+## Interactive web companion
+
+A standalone Streamlit application is implemented in [`app/streamlit_app.py`](app/streamlit_app.py). It is a **complement**, not a Power BI replica. It will become interactive when the validated 2025 snapshot is generated, and can then be published for free via Streamlit Community Cloud. Until the snapshot is available, it explicitly presents the genuine dashboard screenshots without fabricated metrics.
 
 ## Power BI dashboard
 
