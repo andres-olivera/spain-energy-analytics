@@ -3,8 +3,9 @@
 **[Explore the public Streamlit energy dashboard](https://andres-spain-energy-analytics.streamlit.app/)**
 
 This is a web-accessible interactive **companion** to the four-page Power BI
-report, not a public Power BI embedding. The live Overview page and initial
-date/indicator filters have been visually verified.
+report, not a public Power BI embedding. The live Overview view has been
+visually checked, and the owner confirmed Demand, Generation, Market prices
+and date-range filtering operate without errors (17 October 2026).
 
 ## The problem (20-second introduction)
 
