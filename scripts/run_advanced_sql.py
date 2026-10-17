@@ -5,7 +5,6 @@ from pathlib import Path
 
 from spain_energy_analytics.advanced_sql import DEFAULT_DB, ROOT, run
 
-
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--db", type=Path, default=DEFAULT_DB)
