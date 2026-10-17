@@ -1,0 +1,14 @@
+{
+  "year": 2025,
+  "source": "Red Eléctrica REData API",
+  "source_url": "https://apidatos.ree.es",
+  "observation_rows": 22069,
+  "indicators": 16,
+  "unique_dates": 365,
+  "per_dataset": {
+    "demand": 8760,
+    "generation": 4549,
+    "price": 8760
+  },
+  "method": "Full-year validated ETL, public analytic extract (not live data)"
+}

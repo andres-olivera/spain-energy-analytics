@@ -1,0 +1,17 @@
+indicator_key,dataset,indicator_title,magnitude
+demand:10297,demand,Demanda,
+generation:10289,generation,Carbón,
+generation:1454,generation,Ciclo combinado,
+generation:10293,generation,Cogeneración,
+generation:10291,generation,Eólica,
+generation:10290,generation,Fuel + Gas,
+generation:10296,generation,Generación total,
+generation:10288,generation,Hidráulica,
+generation:1446,generation,Nuclear,
+generation:10292,generation,Otras renovables,
+generation:10294,generation,Residuos no renovables,
+generation:10295,generation,Residuos renovables,
+generation:1458,generation,Solar fotovoltaica,
+generation:1459,generation,Solar térmica,
+generation:1451,generation,Turbina de vapor,
+price:1001,price,PVPC,price
