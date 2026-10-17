@@ -140,8 +140,13 @@ def choose_indicator(category: str, label: str) -> str | None:
         return None
     keys = options["indicator_key"].tolist()
     titles = dict(zip(options["indicator_key"], options["indicator_title"], strict=True))
+    preferred = "Eólica" if category == "generation" else None
+    initial = next(
+        (i for i, key in enumerate(keys) if titles[key] == preferred), 0
+    )
     return st.sidebar.selectbox(
-        label, keys, format_func=lambda key: f"{titles[key]} ({key})",
+        label, keys, index=initial,
+        format_func=lambda key: f"{titles[key]} ({key})",
     )
 
 
@@ -184,8 +189,8 @@ with overview_tab:
                 unit_suffix(indicators, price_key),
             )
     st.caption(
-        "No source price series is identified as PVPC unless REData itself "
-        "identifies it so."
+        "The selected market-price series is labeled PVPC in the REData source. "
+        "Its physical price unit is not specified in the source metadata."
     )
 
 with demand_tab:
