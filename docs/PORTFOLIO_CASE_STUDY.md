@@ -54,6 +54,6 @@ to unusual price/demand periods but does not itself establish cost savings.
 
 ## What is not yet included
 
-Interactive public Power BI access, an authentic generation-page screenshot,
-production database hosting, or quantified causal savings. Never claim those
-are done until independently verified.
+Interactive public Power BI access, production database hosting, or quantified
+causal savings. All four Power BI page screenshots, including the authentic
+Generation capture, are now included in the dashboard documentation.
