@@ -18,10 +18,11 @@ replacement. The Power BI deliverable remains documented in
 
 ## Deploy on Streamlit Community Cloud
 
-**First** wait until the snapshot workflow succeeds and
-`app/data/source.json` exists. Without the snapshot the app deliberately
-shows Power BI screenshots as a preview and labels interactive charts as
-pending; it does not invent sample metrics.
+**Dataset ready:** the snapshot workflow completed successfully and
+`app/data/source.json` now records **22,069 historical observations,
+16 indicators and 365 dates for 2025**. The app can therefore be deployed
+immediately. If the published snapshot were missing after a future reset,
+the app would display the genuine Power BI screenshots without inventing metrics.
 
 1. Open https://share.streamlit.io/ using the same account as the churn app.
 2. Choose **Create app** > **Deploy from GitHub**.
@@ -39,8 +40,10 @@ companion app**.
 ## Methodological cautions
 
 - Data represent **2025 only**. They are not live electricity prices.
-- `mercados/precios-mercados-tiempo-real` is a market-price API widget.
-  It must not be labeled **PVPC** without verification of the exact indicator.
+- The price series returned by `mercados/precios-mercados-tiempo-real` is
+  explicitly titled **PVPC** in the 2025 REData indicator metadata. However,
+  its `magnitude` metadata is the word `price`, **not a unit**; the app
+  does not invent EUR/MWh (or other physical units).
 - REData magnitudes are sometimes missing. Do not silently turn raw values
   into MWh or EUR/MWh.
 - Demand/price observations are hourly; generation is daily.
