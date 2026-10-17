@@ -40,6 +40,12 @@ flowchart LR
     G --> I[SQL analysis]
 ```
 
+## Explore the project
+
+- **Power BI**: four-page dashboard documented below. Interactive public sharing is not yet configured; [dashboard build instructions](dashboard/README.md).
+- **Python and SQL**: reproduce the analysis locally using the [quick start](#quick-start) and the [advanced SQL portfolio queries](sql/advanced_analysis.sql).
+- **Decision-focused report**: see the [executive interpretation guide](docs/EXECUTIVE_INSIGHTS.md) for reproducible business questions and cautions about mixed units.
+
 ## Power BI dashboard
 
 The Power BI report uses the modeled CSV layer with one-to-many relationships from `dim_date` and `dim_indicator` into `fact_observation`. The report includes synchronized date filtering and a page navigator across four pages.
@@ -50,10 +56,12 @@ The Power BI report uses the modeled CSV layer with one-to-many relationships fr
 
 ### Demand and generation
 
+The image on the right is a **Python-generated generation analysis**, not a screenshot of the Power BI generation page. The original generation screenshot was found to duplicate the demand screenshot and has been withdrawn pending an authentic replacement.
+
 <table>
 <tr>
 <td width="50%"><img src="dashboard/screenshots/demand.png" alt="Power BI demand analysis"></td>
-<td width="50%"><img src="dashboard/screenshots/generation.png" alt="Power BI generation analysis"></td>
+<td width="50%"><img src="docs/assets/generation_ranking.png" alt="Reproducible generation ranking chart (not a Power BI screenshot)"></td>
 </tr>
 </table>
 
@@ -132,6 +140,12 @@ Run the curated SQL analysis:
 
 ```bash
 python scripts/run_analysis.py
+```
+
+Explore advanced SQLite window-function queries:
+
+```bash
+python scripts/run_advanced_sql.py
 ```
 
 Regenerate static portfolio figures:
