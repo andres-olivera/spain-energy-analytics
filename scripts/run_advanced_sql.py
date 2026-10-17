@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import argparse
+import re
 import sqlite3
 from pathlib import Path
 
@@ -15,11 +16,9 @@ DEFAULT_DB = ROOT / "data" / "processed" / "spain_energy.db"
 
 def named_queries(sql_text: str) -> dict[str, str]:
     """Parse explicit -- QUERY: name blocks, rejecting unsafe or empty sections."""
-    import re
-
     parts = re.split(r"(?m)^-- QUERY: ([a-z][a-z0-9_]*)\s*$", sql_text)
     result = {}
-    for name, body in zip(parts[1::2], parts[2::2]):
+    for name, body in zip(parts[1::2], parts[2::2], strict=True):
         clean = body.strip()
         if not clean or not clean.endswith(";"):
             raise ValueError(f"Incomplete SQL query: {name}")
