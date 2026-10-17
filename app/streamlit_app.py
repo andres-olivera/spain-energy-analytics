@@ -42,9 +42,12 @@ def load_snapshot() -> tuple[pd.DataFrame, pd.DataFrame, dict]:
 def unit_suffix(dims: pd.DataFrame, indicator_key: str) -> str:
     """Use only the original source magnitude; never invent MWh or euros."""
     found = dims.loc[dims["indicator_key"] == indicator_key, "magnitude"]
-    if found.empty or pd.isna(found.iloc[0]) or not str(found.iloc[0]).strip():
-        return "REData source value (unit not supplied)"
-    return f"REData source value ({found.iloc[0]})"
+    if found.empty or pd.isna(found.iloc[0]):
+        return "REData source value (physical unit not supplied)"
+    magnitude = str(found.iloc[0]).strip()
+    if magnitude.lower() in {"", "price", "unknown", "none", "nan"}:
+        return "REData source value (physical unit not supplied)"
+    return f"REData source value ({magnitude})"
 
 
 def plot_line(frame: pd.DataFrame, x: str, y: str, title: str, label: str):
@@ -258,11 +261,63 @@ with gen_tab:
                 "Comparisons are withheld rather than presenting incomparable values."
             )
 
+        # An index is unitless: each series is compared only to its own first
+        # selected month. This remains valid when physical source units are absent.
+        tech["month"] = tech["date"].dt.to_period("M").dt.to_timestamp()
+        monthly_tech = (
+            tech.groupby(["indicator_key", "indicator_title", "month"], as_index=False)[
+                "value"
+            ].mean()
+        )
+        if monthly_tech["month"].nunique() > 1:
+            monthly_tech = monthly_tech.sort_values(["indicator_key", "month"])
+            monthly_tech["baseline"] = monthly_tech.groupby("indicator_key")[
+                "value"
+            ].transform("first")
+            monthly_tech = monthly_tech.loc[monthly_tech["baseline"] != 0].copy()
+            monthly_tech["index_100"] = (
+                100 * monthly_tech["value"] / monthly_tech["baseline"]
+            )
+            suggested = [
+                "Eólica", "Nuclear", "Solar fotovoltaica",
+                "Ciclo combinado", "Hidráulica",
+            ]
+            actual = monthly_tech["indicator_title"].unique().tolist()
+            defaults = [name for name in suggested if name in actual]
+            selected = st.multiselect(
+                "Compare within-technology trends (first selected month = 100)",
+                actual,
+                default=defaults or actual[:4],
+            )
+            if selected:
+                selected_rows = monthly_tech.loc[
+                    monthly_tech["indicator_title"].isin(selected)
+                ]
+                fig = px.line(
+                    selected_rows, x="month", y="index_100",
+                    color="indicator_title", markers=True,
+                    title="Monthly generation trend — indexed per source series",
+                    labels={
+                        "month": "Month", "index_100": "Index (start = 100)",
+                        "indicator_title": "Generation technology",
+                    },
+                )
+                fig.update_layout(
+                    height=430, margin=dict(l=10, r=10, t=55, b=20),
+                )
+                st.plotly_chart(fig, use_container_width=True)
+                st.caption(
+                    "Relative change only, not production shares or absolute volumes. "
+                    "Every technology starts at index 100 independently."
+                )
+
+
 with price_tab:
     st.markdown("### Market prices")
     st.caption(
-        "The selected indicator comes from REData's 'precios-mercados-tiempo-real' "
-        "widget. This does not establish that the series represents the regulated PVPC tariff."
+        "The selected source is REData's 'precios-mercados-tiempo-real' widget. "
+        "Its 2025 indicator is titled PVPC in the source. The metadata label "
+        "'price' does not define a physical price unit, so units are not inferred."
     )
     if price.empty:
         st.info("No matching market price observations.")
