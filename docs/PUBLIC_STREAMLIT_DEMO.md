@@ -16,6 +16,16 @@ replacement. The Power BI deliverable remains documented in
 - Filters: date range and **one explicit source indicator per dataset**.
 - Pages: Overview, Demand, Generation, Market prices, About the data.
 
+## Live public app
+
+[Open Spain Energy Analytics](https://andres-spain-energy-analytics.streamlit.app/)
+
+The owner deployed the Streamlit companion on 17 October 2026. A screenshot
+of the running Overview page confirms the loaded snapshot (22,069 observations,
+365 dates, 16 indicators, three categories), date filter, and demand and price
+charts. The Generation, Demand, Market prices and methodology tabs have not yet
+been individually smoke-tested on the public instance.
+
 ## Deploy on Streamlit Community Cloud
 
 **Dataset ready:** the snapshot workflow completed successfully and
@@ -31,7 +41,7 @@ the app would display the genuine Power BI screenshots without inventing metrics
 5. Main file path: `app/streamlit_app.py`.
 6. Public URL name, if available: `andres-spain-energy-analytics`.
 7. Click **Deploy**, open the URL and exercise all report tabs and date filters.
-8. Add the actual URL to the README after successful public verification.
+8. If redeploying to a new address, update the URL in the README and case study.
 
 Root `requirements.txt` installs the local project with the `app` extra.
 No paid Power BI subscription is required to host this **separate Streamlit
