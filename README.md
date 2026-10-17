@@ -58,12 +58,12 @@ The Power BI report uses the modeled CSV layer with one-to-many relationships fr
 
 ### Demand and generation
 
-The image on the right is a **Python-generated generation analysis**, not a screenshot of the Power BI generation page. The original generation screenshot was found to duplicate the demand screenshot and has been withdrawn pending an authentic replacement.
+Both images below are screenshots of the actual Power BI report, captured on the Demand and Generation pages.
 
 <table>
 <tr>
 <td width="50%"><img src="dashboard/screenshots/demand.png" alt="Power BI demand analysis"></td>
-<td width="50%"><img src="docs/assets/generation_ranking.png" alt="Reproducible generation ranking chart (not a Power BI screenshot)"></td>
+<td width="50%"><img src="dashboard/screenshots/generation.png" alt="Power BI Generation Analysis dashboard: daily production, technology rankings, and monthly generation"></td>
 </tr>
 </table>
 
