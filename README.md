@@ -4,6 +4,8 @@
 
 End-to-end data analytics project built with public Spanish electricity data from **Red Eléctrica de España (REE)**. The repository demonstrates the complete path from a REST API to an analytics-ready data model, SQL analysis, automated tests, CI, reproducible visualizations, and a four-page Power BI dashboard.
 
+**Start here:** [Hiring-manager case study](docs/PORTFOLIO_CASE_STUDY.md) · [Stakeholder questions](docs/EXECUTIVE_INSIGHTS.md) · [Advanced SQL analysis](sql/advanced_analysis.sql).
+
 ## What this project demonstrates
 
 - REST API consumption with retries, timeouts, and reproducible monthly extraction.
