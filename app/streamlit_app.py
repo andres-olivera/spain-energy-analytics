@@ -180,7 +180,10 @@ with overview_tab:
                 "Daily mean — selected market price series",
                 unit_suffix(indicators, price_key),
             )
-    st.caption(\n        "No source price series is identified as PVPC unless REData itself " \n        "identifies it so."\n    )
+    st.caption(
+        "No source price series is identified as PVPC unless REData itself "
+        "identifies it so."
+    )
 
 with demand_tab:
     st.markdown("### Demand: daily and intra-day behavior")
