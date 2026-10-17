@@ -49,14 +49,14 @@ flowchart LR
 ## Explore the project
 
 - **Power BI (original project)**: four-page dashboard documented below; no public Power BI link is currently configured. [Dashboard build instructions](dashboard/README.md).
-- **Streamlit companion (free web demo)**: independent, interactive exploration of the same 2025 REData model, with time filters and indicator selection. [App source](app/streamlit_app.py) · [Deployment guide](docs/PUBLIC_STREAMLIT_DEMO.md). The 2025 public snapshot has been generated and validated (22,069 observations); the [web application is publicly deployed](https://andres-spain-energy-analytics.streamlit.app/). The Overview page and date/indicator controls were visually checked in the live deployment.
+- **Streamlit companion (free web demo)**: independent, interactive exploration of the same 2025 REData model, with time filters and indicator selection. [App source](app/streamlit_app.py) · [Deployment guide](docs/PUBLIC_STREAMLIT_DEMO.md). The 2025 public snapshot has been generated and validated (22,069 observations); the [web application is publicly deployed](https://andres-spain-energy-analytics.streamlit.app/). The live Overview was visually checked, and the owner also confirmed the Demand, Generation and Market prices tabs and date filters function without errors (17 October 2026).
 - **Python and SQL**: reproduce the analysis locally using the [quick start](#quick-start) and the [advanced SQL portfolio queries](sql/advanced_analysis.sql).
 - **Data provenance:** the Streamlit charts will use a versioned 2025 snapshot produced by the [automated REData ETL workflow](.github/workflows/publish_energy_snapshot.yml); original units remain attached to each source indicator.
 - **Decision-focused report**: see the [executive interpretation guide](docs/EXECUTIVE_INSIGHTS.md) for reproducible business questions and cautions about mixed units.
 
 ## Interactive web companion
 
-A standalone Streamlit application is implemented in [`app/streamlit_app.py`](app/streamlit_app.py). It is a **complement**, not a Power BI replica. The validated full-year 2025 snapshot is already published under [`app/data/`](app/data), with **22,069 observations covering 365 dates** and 16 source indicators. The application is [now deployed publicly](https://andres-spain-energy-analytics.streamlit.app/) on Streamlit Community Cloud. Its Overview page and initial filters have been visually verified; the other tabs still need individual live checks. [Deployment notes](docs/PUBLIC_STREAMLIT_DEMO.md).
+A standalone Streamlit application is implemented in [`app/streamlit_app.py`](app/streamlit_app.py). It is a **complement**, not a Power BI replica. The validated full-year 2025 snapshot is already published under [`app/data/`](app/data), with **22,069 observations covering 365 dates** and 16 source indicators. The application is [now deployed publicly](https://andres-spain-energy-analytics.streamlit.app/) on Streamlit Community Cloud. The Overview, Demand, Generation and Market prices views plus date filters have been manually checked on the live instance (17 October 2026). [Deployment notes](docs/PUBLIC_STREAMLIT_DEMO.md).
 
 ## Power BI dashboard
 
