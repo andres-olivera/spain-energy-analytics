@@ -100,7 +100,7 @@ IF(
 - Average Daily Generation by Technology
 - Monthly Generation by Technology
 
-![Generation](screenshots/generation.png)
+> **Screenshot pending:** the previous `screenshots/generation.png` was byte-for-byte identical to the demand screenshot and has been removed to avoid misrepresenting the report. The generation analysis is demonstrated separately in [Python figure](../docs/assets/generation_ranking.png). An authentic Power BI capture can be added later.
 
 ### Prices
 - Daily Average PVPC
