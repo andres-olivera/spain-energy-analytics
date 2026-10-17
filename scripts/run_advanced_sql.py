@@ -1,4 +1,5 @@
 """Execute read-only advanced SQL analyses on the locally generated SQLite model."""
+
 from __future__ import annotations
 
 import argparse
