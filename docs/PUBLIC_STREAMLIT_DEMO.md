@@ -23,8 +23,10 @@ replacement. The Power BI deliverable remains documented in
 The owner deployed the Streamlit companion on 17 October 2026. A screenshot
 of the running Overview page confirms the loaded snapshot (22,069 observations,
 365 dates, 16 indicators, three categories), date filter, and demand and price
-charts. The Generation, Demand, Market prices and methodology tabs have not yet
-been individually smoke-tested on the public instance.
+charts. The owner subsequently confirmed that Demand, Generation, Market prices
+and changing the date filter work correctly without errors. These are
+manual public-app smoke checks, not automated end-to-end browser tests;
+'About the data' has not been individually verified.
 
 ## Deploy on Streamlit Community Cloud
 
