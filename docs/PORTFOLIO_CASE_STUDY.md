@@ -1,5 +1,11 @@
 # Spain Energy Analytics — case study for hiring managers
 
+**[Explore the public Streamlit energy dashboard](https://andres-spain-energy-analytics.streamlit.app/)**
+
+This is a web-accessible interactive **companion** to the four-page Power BI
+report, not a public Power BI embedding. The live Overview page and initial
+date/indicator filters have been visually verified.
+
 ## The problem (20-second introduction)
 
 Spanish electricity operations generate hourly demand and price observations,
@@ -15,6 +21,8 @@ inspect without manually cleaning each monthly response.
 - SQL analytics on SQLite, including window-function examples and date-aware
   comparisons of demand and prices.
 - A four-page Power BI dashboard showing demand, generation and prices.
+- A public Streamlit companion built on a versioned, verified 2025 REData snapshot
+  with historical filters and interactive analytical charts.
 - Unit/integration tests with automated CI on Python 3.11 and 3.12.
 
 ## Evidence
